@@ -5,10 +5,18 @@ export const mainStore = defineStore('main', {
   persist: true,
   state: (): IMainStore => {
     return {
-      sym: [
-        ['(', ')'],
-        ['[', ']']
-      ],
+      config: {
+        sym: [
+          ['(', ')'],
+          ['[', ']']
+        ],
+        switch: {
+          autoStart: {
+            name: '自动开始',
+            active: false
+          }
+        }
+      },
       prompt: [
         {
           id: '0',
@@ -172,6 +180,7 @@ export const mainStore = defineStore('main', {
         // console.log(e, tags, i, target.__draggable_component__)
         const fa = this.pos(target, i, type)
         const arrayT = (fa as ITag[])
+        // console.log(fa)
         arrayT.pop()
         for (const t of tags) {
           if (t.length > 0) {
@@ -284,7 +293,7 @@ export const mainStore = defineStore('main', {
       // const tags: ITag[] = []
       // 添加权重
       const weight = (element: ITag, center: string) => {
-        const sym = this.sym
+        const sym = this.config.sym
         let s
         if (typeof element.weightNu !== 'undefined') {
           const nu = element.weightNu
@@ -351,10 +360,12 @@ export const mainStore = defineStore('main', {
           })
           console.log(input)
           input[0].props.value = p
-          input[0].props.value = pn
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          document.querySelector('body > gradio-app').shadowRoot.querySelector('#txt2img_generate').click()
+          input[1].props.value = pn
+          if (this.config.switch.autoStart.active) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            document.querySelector('body > gradio-app').shadowRoot.querySelector('#txt2img_generate').click()
+          }
         }
       } catch (e) {
         console.log(e)

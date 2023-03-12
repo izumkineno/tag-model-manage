@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSpace: typeof import('element-plus/es')['ElSpace']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     NestedFrame: typeof import('./src/components/nested-frame.vue')['default']
     NestedItem: typeof import('./src/components/nested-item.vue')['default']
     RawDisplayer: typeof import('./src/components/infra/raw-displayer.vue')['default']
