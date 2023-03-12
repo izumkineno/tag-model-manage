@@ -170,27 +170,35 @@ export const mainStore = defineStore('main', {
       v.state.editing = false
     },
     // 判断是否有多个被输入
-    editingInputMulti(e: Event, v: ITag, i: number[], type: TTagType) {
-      this.editingInput(v)
+    editingInputMulti(v: ITag, i: number[], type: TTagType) {
+      v.name = v.name.trim()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // console.log(e, i, e.target.parentElement)
       if (v.name.search(',') !== -1) {
         const tags = v.name.split(',')
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const target = e.target.__vueParentComponent.vnode.el
-        // console.log(e, tags, i, target.__draggable_component__)
-        const fa = this.pos(target, i, type)
-        const arrayT = (fa as ITag[])
-        // console.log(fa)
-        arrayT.pop()
-        for (const t of tags) {
-          if (t.length > 0) {
-            const newTag = this.tagModel()
-            newTag.name = t
-            newTag.state.editing = false
-            arrayT.push(newTag)
+        let p: ITag['children'] | ITag = this[type]
+        for (const v of i) {
+          if (p) {
+            p = p[v].children
+          }
+        }
+        console.log(p, i)
+        if (p) {
+          const curIndex = p.indexOf(v)
+          console.log(p, v, curIndex)
+          p.splice(curIndex, 1)
+          for (const t of tags) {
+            if (t.length > 0) {
+              const newTag = this.tagModel()
+              newTag.name = t
+              newTag.state.editing = false
+              p.push(newTag)
+            }
           }
         }
       }
+      this.editingInput(v)
     },
     // 删除
     delete(e: PointerEvent, i: number[], type: TTagType): void {
