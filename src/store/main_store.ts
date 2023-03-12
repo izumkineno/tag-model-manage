@@ -169,10 +169,11 @@ export const mainStore = defineStore('main', {
       v.name = v.name.trim()
       v.state.editing = false
     },
-    // 判断是否有多个被输入
+    // 判断是否有多个被输入 todo: bugfix vnode无法读取
     editingInputMulti(e: Event, v: ITag, i: number[], type: TTagType) {
       this.editingInput(v)
       if (v.name.search(',') !== -1) {
+        console.log(e, v, i)
         const tags = v.name.split(',')
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
