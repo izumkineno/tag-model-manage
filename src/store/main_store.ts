@@ -11,8 +11,8 @@ export const mainStore = defineStore('main', {
       ],
       prompt: [
         {
-          id: 'string',
-          name: 'string',
+          id: '0',
+          name: '这里创建提示词',
           state: {
             active: false,
             editing: false,
@@ -21,32 +21,22 @@ export const mainStore = defineStore('main', {
           weight: 0,
           longText: false,
           children: []
-        },
-        {
-          id: '1',
-          name: 'task 1',
-          state: {
-            active: false,
-            editing: false,
-            weightEditing: false
-          },
-          weight: 0,
-          longText: false,
-          children: []
-        },
-        {
-          id: '2',
-          name: 'task 21',
-          state: {
-            active: false,
-            editing: false,
-            weightEditing: false
-          },
-          weight: 0,
-          longText: false
         }
       ],
-      promptNeg: []
+      promptNeg: [
+        {
+          id: '1',
+          name: '这里创建负面提示词',
+          state: {
+            active: false,
+            editing: false,
+            weightEditing: false
+          },
+          weight: 0,
+          longText: false,
+          children: []
+        }
+      ]
     }
   },
   actions: {
@@ -291,7 +281,7 @@ export const mainStore = defineStore('main', {
     // 输出tag
     output() {
       // console.log(this.tag)
-      const tags: ITag[] = []
+      // const tags: ITag[] = []
       // 添加权重
       const weight = (element: ITag, center: string) => {
         const sym = this.sym
@@ -320,7 +310,7 @@ export const mainStore = defineStore('main', {
           if (v.state.active) {
             let temp
             if (typeof v.children === 'undefined') {
-              tags.push(v)
+              // tags.push(v)
               // t.push(weight(v, v.name))
               temp = weight(v, v.name)
             } else {
@@ -334,9 +324,41 @@ export const mainStore = defineStore('main', {
         })
         return t.join(',')
       }
-      console.log(tags)
-      console.log(recursionTag(this.prompt))
-      console.log(recursionTag(this.promptNeg))
+      const p = recursionTag(this.prompt)
+      const pn = recursionTag(this.promptNeg)
+      // console.log(tags)
+      console.log(p)
+      console.log(pn)
+
+      try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const cps = gradio_config.components
+        if (cps) {
+          const input: any[] = []
+          cps.forEach((v: any, i: number) => {
+            // console.log(v.type)
+            if (v.type === 'textbox') {
+              // console.log(v.props)
+              const v1 = v.props
+              if (v1.elem_id === 'txt2img_prompt' && v1.label === 'Prompt') {
+                input.push(cps[i])
+              }
+              if (v1.elem_id === 'txt2img_neg_prompt' && v1.label === 'Negative prompt') {
+                input.push(cps[i])
+              }
+            }
+          })
+          console.log(input)
+          input[0].props.value = p
+          input[0].props.value = pn
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          document.querySelector('body > gradio-app').shadowRoot.querySelector('#txt2img_generate').click()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     },
     // todo: 右键菜单
     contextmenu() {

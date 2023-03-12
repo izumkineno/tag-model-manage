@@ -9,19 +9,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    EditDiv: typeof import('./src/components/edit-div.vue')['default']
+    ElAffix: typeof import('element-plus/es')['ElAffix']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElEdit: typeof import('./src/components/el-edit.vue')['default']
-    ElInput: typeof import('element-plus/es')['ElInput']
-    ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
+    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSpace: typeof import('element-plus/es')['ElSpace']
     NestedFrame: typeof import('./src/components/nested-frame.vue')['default']
     NestedItem: typeof import('./src/components/nested-item.vue')['default']
     RawDisplayer: typeof import('./src/components/infra/raw-displayer.vue')['default']
-  }
-
-  export interface ComponentCustomProperties {
-    vPopover: typeof import('element-plus/es')['ElPopoverDirective']
   }
 }
