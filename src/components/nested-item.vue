@@ -25,7 +25,7 @@
           v-model="element.name"
           class="tag-input"
           @blur="store.editingInput(element)"
-          @keyup.enter="store.editingInputMulti($event, element, index)"
+          @keyup.enter="store.editingInputMulti($event, element, index, type)"
           @click.stop/>
         <input
           v-if="element.state.weightEditing"

@@ -10,6 +10,13 @@
     <template #header>
       <el-space wrap>
         <el-button type="primary" @click="store.output">输出到webUI</el-button>
+        <el-switch
+          v-model="store.config.switch.autoStart.active"
+          :active-text="store.config.switch.autoStart.name"
+          :inactive-text="store.config.switch.autoStart.name"
+          class="ml-2"
+          inline-prompt
+        />
         <el-button ref="buttonRef" v-click-outside="onClickOutside">帮助</el-button>
       </el-space>
       <el-popover

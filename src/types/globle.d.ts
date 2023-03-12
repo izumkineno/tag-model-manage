@@ -12,10 +12,20 @@ interface ITag {
   children?: ITag[]
 }
 
+interface ISwitch {
+  name: string,
+  active: boolean
+}
+
 interface IMainStore {
   prompt: ITag[]
   promptNeg: ITag[]
-  sym: Array<Array<string>>
+  config: {
+    sym: Array<Array<string>>
+    switch: {
+      autoStart: ISwitch
+    }
+  }
 }
 
 type TTagType = 'prompt' | 'promptNeg'
