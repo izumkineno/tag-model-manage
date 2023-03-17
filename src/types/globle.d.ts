@@ -12,14 +12,22 @@ interface ITag {
   children?: ITag[]
 }
 
+type TTagType = 'prompt' | 'promptNeg' | 'todo'
+type TInputType = 'weightEditing' | 'editing'
+
 interface ISwitch {
-  name: string,
+  name: string
   active: boolean
 }
 
-interface IMainStore {
-  prompt: ITag[]
-  promptNeg: ITag[]
+interface IInfoTags {
+  name: string
+  expansion: boolean
+  type: TTagType
+}
+
+interface IMainStore extends Record<TTagType, ITag[]> {
+  info: Record<TTagType, IInfoTags>;
   config: {
     sym: Array<Array<string>>
     switch: {
@@ -27,6 +35,3 @@ interface IMainStore {
     }
   }
 }
-
-type TTagType = 'prompt' | 'promptNeg'
-type TInputType = 'weightEditing' | 'editing'

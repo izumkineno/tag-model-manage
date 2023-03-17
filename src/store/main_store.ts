@@ -5,6 +5,23 @@ export const mainStore = defineStore('main', {
   persist: true,
   state: (): IMainStore => {
     return {
+      info: {
+        prompt: {
+          name: '提示词',
+          expansion: true,
+          type: 'prompt'
+        },
+        promptNeg: {
+          name: '反向提示词',
+          expansion: true,
+          type: 'promptNeg'
+        },
+        todo: {
+          name: '待选/草稿栏',
+          expansion: false,
+          type: 'todo'
+        }
+      },
       config: {
         sym: [
           ['(', ')'],
@@ -44,7 +61,8 @@ export const mainStore = defineStore('main', {
           longText: false,
           children: []
         }
-      ]
+      ],
+      todo: []
     }
   },
   actions: {
@@ -120,12 +138,12 @@ export const mainStore = defineStore('main', {
       return s
     },
     // tag 模板
-    tagModel(): ITag {
+    tagModel(name?: string): ITag {
       const id = '' + Math.random().toString(36).slice(-8)
       return {
         id: id,
         longText: false,
-        name: id,
+        name: name || id,
         state: {
           active: true,
           editing: true,
