@@ -78,7 +78,7 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
-    gradioConfig(read?: boolean) {
+    GradioConfig(read?: boolean) {
       try {
         this.gradioConfigItems.forEach(v => {
           if (!read) {
@@ -87,15 +87,18 @@ export const mainStore = defineStore('main', {
             // eslint-disable-next-line no-unused-expressions
             this.gradioConfig[v] = gradio_config.components.filter(v2 => v2.props.elem_id === v)[0].props.value
           } else {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-unused-expressions
-            gradio_config.components.filter(v2 => v2.props.elem_id === v)[0].props.value = this.gradioConfig[v]
+            if (this.gradioConfig[v]) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              // eslint-disable-next-line no-unused-expressions
+              gradio_config.components.filter(v2 => v2.props.elem_id === v)[0].props.value = this.gradioConfig[v]
+            }
           }
         })
       } catch (e) {
         console.log(e)
       }
+      console.log(this.gradioConfig)
     },
     cerfaiSearch(
       useCate: boolean,
