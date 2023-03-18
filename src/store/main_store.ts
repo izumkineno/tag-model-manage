@@ -105,7 +105,7 @@ export const mainStore = defineStore('main', {
         if (res.code === 200) {
           this.tableData = res.data
           // console.log('data', res.data)
-          ElMessage.success(res.msg || '获取数据成功')
+          ElMessage.success(res.msg || `获取数据成功，共 ${res.data.length} 条`)
         } else {
           ElMessage.error(res.msg)
           // console.log('data', res.msg)
