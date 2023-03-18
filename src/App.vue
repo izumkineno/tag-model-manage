@@ -90,7 +90,8 @@ const onClickOutside = () => {
 const tagSearch = () => {
   if (input.value.length > 0) {
     store.tagSearch(input.value)
-    store.tagSearch(input.value)
+  } else {
+    store.tableData = []
   }
 }
 </script>

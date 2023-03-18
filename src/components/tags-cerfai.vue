@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar v-if="store.cate" class="menu">
+  <el-scrollbar class="menu">
     <el-menu
       :ellipsis="false"
       :unique-opened="true"
@@ -17,7 +17,7 @@
       </el-sub-menu>
     </el-menu>
   </el-scrollbar>
-  <el-card v-if="store.tableData.length > 0">
+  <el-card>
     <el-table
       :data="store.tableData"
       size="small"
