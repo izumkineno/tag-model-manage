@@ -33,7 +33,8 @@
           class="ml-2"
           inline-prompt/>
         <el-button ref="buttonRef" v-click-outside="onClickOutside">帮助</el-button>
-        <el-input v-model="input" clearable placeholder="词条搜索（cerfai提供）" @keyup.enter="tagSearch"/>
+        <el-button @click="store.gradioConfig">保存生成图基础配置</el-button>
+        <el-input v-model="input" clearable placeholder="词条搜索（cerfai提供）" @keydown.enter="tagSearch"/>
         <el-button :icon="Search" circle size="small" type="primary" @click="tagSearch"/>
       </el-space>
       <el-popover
@@ -93,7 +94,7 @@ const onClickOutside = () => {
 
 const tagSearch = () => {
   if (input.value.length > 0) {
-    store.tagSearch(input.value)
+    store.cerfaitagSearch(input.value)
   } else {
     store.tableData = []
   }

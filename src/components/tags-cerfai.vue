@@ -49,7 +49,7 @@ onMounted(() => {
 })
 
 const handleSelect = (index: number) => {
-  store.tagSearch('', index.toString())
+  store.cerfaitagSearch('', index.toString())
 }
 const rowClick = (row: { name: string | undefined; }) => {
   const tag: ITag = store.tagModel(row.name)

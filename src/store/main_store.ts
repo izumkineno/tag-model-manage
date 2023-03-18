@@ -35,6 +35,15 @@ export const mainStore = defineStore('main', {
           }
         }
       },
+      gradioConfigItems: [
+        'txt2img_sampling',
+        'txt2img_steps',
+        'txt2img_height',
+        'txt2img_width',
+        'txt2img_batch_count',
+        'txt2img_batch_size',
+        'txt2img_cfg_scale'],
+      gradioConfig: {},
       cate: [],
       tableData: [],
       prompt: [
@@ -69,6 +78,25 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
+    gradioConfig(read?: boolean) {
+      try {
+        this.gradioConfigItems.forEach(v => {
+          if (!read) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line no-unused-expressions
+            this.gradioConfig[v] = gradio_config.components.filter(v2 => v2.props.elem_id === v)[0].props.value
+          } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line no-unused-expressions
+            gradio_config.components.filter(v2 => v2.props.elem_id === v)[0].props.value = this.gradioConfig[v]
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    },
     cerfaiSearch(
       useCate: boolean,
       callback: (response: { responseText: string }) => void,
@@ -99,7 +127,7 @@ export const mainStore = defineStore('main', {
       // @ts-ignore
       document.Request(req)
     },
-    tagSearch(value: string, id?: string) {
+    cerfaitagSearch(value: string, id?: string) {
       this.cerfaiSearch(false, (response) => {
         const res = JSON.parse(response.responseText)
         if (res.code === 200) {
@@ -252,7 +280,7 @@ export const mainStore = defineStore('main', {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // console.log(e, i, e.target.parentElement)
-      if (v.name.tagSearch(',') !== -1) {
+      if (v.name.search(',') !== -1) {
         const tags = v.name.split(',')
         let p: ITag['children'] | ITag = this[type]
         for (const v of i) {

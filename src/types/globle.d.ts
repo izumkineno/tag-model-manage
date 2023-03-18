@@ -27,12 +27,16 @@ interface IInfoTags {
 }
 
 interface IMainStore extends Record<TTagType, ITag[]> {
-  info: Record<TTagType, IInfoTags>;
+  info: Record<TTagType, IInfoTags>
   config: {
     sym: Array<Array<string>>
     switch: {
       autoStart: ISwitch
     }
+  }
+  gradioConfigItems: string[]
+  gradioConfig: {
+    [prop: string]: string | number
   }
   cate: JSON[]
   tableData: JSON[]
