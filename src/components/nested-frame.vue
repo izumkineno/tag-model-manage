@@ -1,7 +1,6 @@
 <template>
-  <div :style="store.info.todo.expansion && {position: 'sticky'}" class="todo-frame">
-    <NestedTags :data="store.todo" :data-info="store.info.todo"/>
-  </div>
+  <NestedTags :data="store.todo" :data-info="store.info.todo" :style="store.info.todo.expansion && { position: 'sticky' }"
+              class="todo-frame"/>
   <NestedTags :data="store.prompt" :data-info="store.info.prompt"/>
   <NestedTags :data="store.promptNeg" :data-info="store.info.promptNeg"/>
 </template>
@@ -13,9 +12,16 @@ import NestedTags from '@/components/nested-tags.vue'
 const store = mainStore()
 
 </script>
-<style scoped>
+<style>
 .todo-frame {
-  top: 0;
-  z-index: 9999;
+  .el-card {
+    top: 0;
+    z-index: 3000;
+
+    .el-card__body {
+      max-height: 40vh;
+      overflow: hidden;
+    }
+  }
 }
 </style>

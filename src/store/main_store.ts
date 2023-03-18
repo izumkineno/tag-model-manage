@@ -42,7 +42,8 @@ export const mainStore = defineStore('main', {
         'txt2img_width',
         'txt2img_batch_count',
         'txt2img_batch_size',
-        'txt2img_cfg_scale'],
+        'txt2img_cfg_scale',
+        'txt2img_restore_faces'],
       gradioConfig: {},
       cate: [],
       tableData: [],
@@ -86,7 +87,7 @@ export const mainStore = defineStore('main', {
         gradio_config.components.forEach(v => {
           this.gradioConfigItems.forEach(v2 => {
             if (v2 === v.props.elem_id) {
-              console.log(v2, v.props.elem_id)
+              // console.log(v2, v.props.elem_id)
               if (read) {
                 if (typeof this.gradioConfig[v2] !== 'undefined') {
                   v.props.value = this.gradioConfig[v2]
@@ -97,7 +98,7 @@ export const mainStore = defineStore('main', {
             }
           })
         })
-        ElMessage.success('读取/保存配置成功：' + this.gradioConfig)
+        ElMessage.success('读取/保存配置成功：' + this.gradioConfig.toString())
       } catch (e) {
         ElMessage.error('读取/保存配置失败：' + e)
       }
