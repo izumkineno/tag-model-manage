@@ -68,7 +68,7 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
-    async cerfaiSearch(
+    cerfaiSearch(
       useCate: boolean,
       callback: (response: { responseText: string }) => void,
       keyword?: string,
@@ -97,6 +97,28 @@ export const mainStore = defineStore('main', {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.Request(req)
+    },
+    tagSearch(value: string, id?: string) {
+      this.cerfaiSearch(false, (response) => {
+        const res = JSON.parse(response.responseText)
+        if (res.code === 200) {
+          this.tableData = res.data
+          console.log('data', res.data)
+        } else {
+          console.log('data', res.msg)
+        }
+      }, value, id)
+    },
+    cataGet() {
+      this.cerfaiSearch(true, (response) => {
+        const res = JSON.parse(response.responseText)
+        if (res.code === 200) {
+          this.cate = res.data
+          console.log('cate', res.data)
+        } else {
+          console.log('cate', res.msg)
+        }
+      })
     },
     /***
      *  左键默认功能和快捷键映射
@@ -225,7 +247,7 @@ export const mainStore = defineStore('main', {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // console.log(e, i, e.target.parentElement)
-      if (v.name.search(',') !== -1) {
+      if (v.name.tagSearch(',') !== -1) {
         const tags = v.name.split(',')
         let p: ITag['children'] | ITag = this[type]
         for (const v of i) {

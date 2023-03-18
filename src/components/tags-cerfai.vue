@@ -36,16 +36,16 @@
 
 <script lang="ts" setup>
 import { mainStore } from '@/store/main_store'
+import { onMounted } from 'vue'
 
 const store = mainStore()
-const cate = {
-  code: 200,
-  data: [],
-  msg: '获取完整分类成功'
-}
+
+onMounted(() => {
+  store.cataGet()
+})
 
 const handleSelect = (index: number) => {
-  console.log(index)
+  store.tagSearch('', index.toString())
 }
 const rowClick = (row: { name: string | undefined; }) => {
   const tag: ITag = store.tagModel(row.name)
