@@ -86,6 +86,7 @@ export const mainStore = defineStore('main', {
         data: useCate ? '' : data,
         onload: callback
       }
+      console.log('Request', req)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.Request(req)
