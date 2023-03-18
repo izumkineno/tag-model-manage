@@ -86,15 +86,15 @@ export const mainStore = defineStore('main', {
         gradio_config.components.forEach(v => {
           this.gradioConfigItems.forEach(v2 => {
             if (v2 === v.props.elem_id) {
+              console.log(v2, v.props.elem_id)
               if (read) {
-                if (typeof this.gradioConfig[v] !== 'undefined') {
-                  v.props.value = this.gradioConfig[v]
+                if (typeof this.gradioConfig[v2] !== 'undefined') {
+                  v.props.value = this.gradioConfig[v2]
                 }
               } else {
-                this.gradioConfig[v] = v.props.value
+                this.gradioConfig[v2] = v.props.value
+                console.log(v2, '赋值')
               }
-            } else {
-              console.log(v2, v.props.elem_id)
             }
           })
         })
