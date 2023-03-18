@@ -93,16 +93,14 @@ export const mainStore = defineStore('main', {
                 }
               } else {
                 this.gradioConfig[v2] = v.props.value
-                console.log(v2, '赋值')
               }
             }
           })
         })
-        console.log(this.gradioConfig)
+        ElMessage.success('读取/保存配置成功：' + this.gradioConfig)
       } catch (e) {
-        console.log(e)
+        ElMessage.error('读取/保存配置失败：' + e)
       }
-      console.log(this.gradioConfig)
     },
     cerfaiSearch(
       useCate: boolean,
