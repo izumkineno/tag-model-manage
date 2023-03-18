@@ -33,7 +33,7 @@
           class="ml-2"
           inline-prompt/>
         <el-button ref="buttonRef" v-click-outside="onClickOutside">帮助</el-button>
-        <el-button @click="store.GradioConfig(false)">保存生成图基础配置</el-button>
+        <el-button @click="store.GradioConfig(false)" @contextmenu="gradioConfigClear">保存生成图基础配置</el-button>
         <el-input v-model="input" clearable placeholder="词条搜索（cerfai提供）" @keydown.enter="tagSearch"/>
         <el-button :icon="Search" circle size="small" type="primary" @click="tagSearch"/>
       </el-space>
@@ -58,7 +58,7 @@
 import NestedFrame from '@/components/nested-frame.vue'
 import { Edit, Search } from '@element-plus/icons-vue'
 import { onMounted, ref, unref } from 'vue'
-import { ClickOutside as vClickOutside } from 'element-plus'
+import { ClickOutside as vClickOutside, ElMessage } from 'element-plus'
 import { mainStore } from '@/store/main_store'
 import ResShow from '@/components/tags-cerfai.vue'
 
@@ -98,6 +98,11 @@ const tagSearch = () => {
   } else {
     store.tableData = []
   }
+}
+
+const gradioConfigClear = () => {
+  store.gradioConfig = {}
+  ElMessage.success('清理配置成功')
 }
 onMounted(() => {
   try {
