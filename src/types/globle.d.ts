@@ -34,4 +34,6 @@ interface IMainStore extends Record<TTagType, ITag[]> {
       autoStart: ISwitch
     }
   }
+  cate: JSON[]
+  tableData: JSON[]
 }

@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 import NestedFrame from '@/components/nested-frame.vue'
 import { Edit, Search } from '@element-plus/icons-vue'
-import { onMounted, ref, unref } from 'vue'
+import { ref, unref } from 'vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
 import { mainStore } from '@/store/main_store'
 import ResShow from '@/components/tags-cerfai.vue'
@@ -88,16 +88,12 @@ const onClickOutside = () => {
 }
 
 const tagSearch = () => {
-  console.log('123')
+  const res = store.cerfaiSearch(false, input.value)
+  console.log('res', res)
+  if (res.code === 200) {
+    store.tableData = res.data
+  }
 }
-onMounted(() => {
-  const main = 'https://api.cerfai.com'
-  const search = '/search_tags'
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const a = document.monkeyRequest(main + search)
-  console.log('test', a)
-})
 </script>
 <style>
 .el-affix {

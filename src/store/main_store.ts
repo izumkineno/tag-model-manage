@@ -34,6 +34,8 @@ export const mainStore = defineStore('main', {
           }
         }
       },
+      cate: [],
+      tableData: [],
       prompt: [
         {
           id: '0',
@@ -66,6 +68,27 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
+    cerfaiSearch(useCate: boolean, keyword?: string, id?: string): {
+      code: number,
+      data: JSON[]
+    } {
+      const main = 'https://api.cerfai.com'
+      const cate = '/open/get_full_categories'
+      const search = '/search_tags'
+      if (useCate) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return document.monkeyRequest('Get', main + cate)
+      } else {
+        const data = {
+          keyword: keyword || '',
+          category_id: id || ''
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return document.monkeyRequest('Post', main + search, data)
+      }
+    },
     /***
      *  左键默认功能和快捷键映射
      *  0  None        启用/禁用
