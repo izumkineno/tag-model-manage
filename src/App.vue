@@ -90,10 +90,13 @@ const onClickOutside = () => {
 const tagSearch = () => {
   console.log('123')
 }
-// todo: 预计是在抽屉头开个搜索栏，然后在body里开个结果栏，然后用drag框上以供拖动。然后提供tag扫描查库翻译功能
-// todo: API中的tag分类栏，插到左边或右边的栏位中
 onMounted(() => {
-  import('./externals/GM_xmlhttpRequest')
+  const main = 'https://api.cerfai.com'
+  const search = '/search_tags'
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const a = document.monkeyRequest(main + search)
+  console.log('test', a)
 })
 </script>
 <style>
