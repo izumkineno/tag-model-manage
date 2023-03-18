@@ -68,25 +68,27 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
-    async cerfaiSearch(useCate: boolean, keyword?: string, id?: string): Promise<{ code: number; data: JSON[] }> {
+    async cerfaiSearch(
+      useCate: boolean,
+      callback: (response: { responseText: string }) => void,
+      keyword?: string,
+      id?: string) {
       const main = 'https://api.cerfai.com'
       const cate = '/open/get_full_categories'
       const search = '/search_tags'
-      if (useCate) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return await document.monkeyRequest('Get', main + cate)
-      } else {
-        const data = {
-          keyword: keyword || '',
-          category_id: id || ''
-        }
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const a = document.monkeyRequest('Post', main + search, data)
-        console.log('cerfaiSearch', a)
-        return await a
+      const data = {
+        keyword: keyword || '',
+        category_id: id || ''
       }
+      const req = {
+        method: 'Post',
+        url: useCate ? main + cate : main + search,
+        data: useCate ? '' : data,
+        onload: callback
+      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      document.Request(req)
     },
     /***
      *  左键默认功能和快捷键映射
