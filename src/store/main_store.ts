@@ -68,17 +68,14 @@ export const mainStore = defineStore('main', {
     }
   },
   actions: {
-    cerfaiSearch(useCate: boolean, keyword?: string, id?: string): {
-      code: number,
-      data: JSON[]
-    } {
+    async cerfaiSearch(useCate: boolean, keyword?: string, id?: string): Promise<{ code: number; data: JSON[] }> {
       const main = 'https://api.cerfai.com'
       const cate = '/open/get_full_categories'
       const search = '/search_tags'
       if (useCate) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        return document.monkeyRequest('Get', main + cate)
+        return await document.monkeyRequest('Get', main + cate)
       } else {
         const data = {
           keyword: keyword || '',
@@ -86,7 +83,9 @@ export const mainStore = defineStore('main', {
         }
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        return document.monkeyRequest('Post', main + search, data)
+        const a = document.monkeyRequest('Post', main + search, data)
+        console.log('cerfaiSearch', a)
+        return await a
       }
     },
     /***
