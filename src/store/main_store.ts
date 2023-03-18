@@ -94,7 +94,7 @@ export const mainStore = defineStore('main', {
         data: JSON.stringify(useCate ? '' : data),
         onload: callback
       }
-      console.log('Request', req)
+      // console.log('Request', req)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.Request(req)
@@ -104,8 +104,8 @@ export const mainStore = defineStore('main', {
         const res = JSON.parse(response.responseText)
         if (res.code === 200) {
           this.tableData = res.data
-          console.log('data', res.data)
-          ElMessage.success(res.msg)
+          // console.log('data', res.data)
+          ElMessage.success(res.msg || '获取数据成功')
         } else {
           ElMessage.error(res.msg)
           // console.log('data', res.msg)
@@ -117,8 +117,8 @@ export const mainStore = defineStore('main', {
         const res = JSON.parse(response.responseText)
         if (res.code === 200) {
           this.cate = res.data
-          console.log('cate', res.data)
-          ElMessage.success(res.msg)
+          // console.log('cate', res.data)
+          ElMessage.success(res.msg || '获取子类成功')
         } else {
           ElMessage.error(res.msg)
           // console.log('cate', res.msg)
@@ -260,10 +260,10 @@ export const mainStore = defineStore('main', {
             p = p[v].children
           }
         }
-        console.log(p, i)
+        // console.log(p, i)
         if (p) {
           const curIndex = p.indexOf(v)
-          console.log(p, v, curIndex)
+          // console.log(p, v, curIndex)
           p.splice(curIndex, 1)
           for (const t of tags) {
             if (t.length > 0) {
@@ -421,8 +421,8 @@ export const mainStore = defineStore('main', {
       const p = recursionTag(this.prompt)
       const pn = recursionTag(this.promptNeg)
       // console.log(tags)
-      console.log(p)
-      console.log(pn)
+      // console.log(p)
+      // console.log(pn)
 
       try {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -443,7 +443,7 @@ export const mainStore = defineStore('main', {
               }
             }
           })
-          console.log(input)
+          // console.log(input)
           input[0].props.value = p
           input[1].props.value = pn
           if (this.config.switch.autoStart.active) {
@@ -453,7 +453,7 @@ export const mainStore = defineStore('main', {
           }
         }
       } catch (e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     // todo: 右键菜单
