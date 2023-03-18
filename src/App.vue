@@ -90,7 +90,11 @@ const onClickOutside = () => {
 const tagSearch = () => {
   store.cerfaiSearch(false, (response) => {
     console.log('app', response)
-  })
+    const res = JSON.parse(response.responseText)
+    if (res.code === 200) {
+      store.tableData = res.data
+    }
+  }, input.value)
 }
 </script>
 <style>
