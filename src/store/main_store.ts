@@ -87,12 +87,14 @@ export const mainStore = defineStore('main', {
         gradio_config.components.forEach(v => {
           this.gradioConfigItems.forEach(v2 => {
             if (v2 === v) {
+              const v3 = v.props.value
+              console.log(v3, v)
               if (read) {
                 if (typeof this.gradioConfig[v] !== 'undefined') {
                   v.props.value = this.gradioConfig[v]
                 }
               } else {
-                this.gradioConfig[v] = v.props.value
+                this.gradioConfig[v] = v3
                 t[v] = v.props.value
                 console.log(v.props.value)
               }
