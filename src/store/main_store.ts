@@ -76,14 +76,18 @@ export const mainStore = defineStore('main', {
       const main = 'https://api.cerfai.com'
       const cate = '/open/get_full_categories'
       const search = '/search_tags'
-      const data = {
-        keyword: keyword || '',
-        category_id: id || ''
+      const data: {
+        keyword: string,
+        // eslint-disable-next-line camelcase
+        category_id?: string
+      } = {
+        keyword: keyword || ''
       }
+      if (id) data.category_id = id
       const req = {
         method: 'Post',
         url: useCate ? main + cate : main + search,
-        data: useCate ? '' : data,
+        data: useCate ? JSON.parse('') : data,
         onload: callback
       }
       console.log('Request', req)

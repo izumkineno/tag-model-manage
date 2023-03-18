@@ -94,6 +94,8 @@ const tagSearch = () => {
     if (res.code === 200) {
       console.log('data', res.data)
       store.tableData = res.data
+    } else {
+      console.log(res.msg)
     }
   }, input.value)
 }

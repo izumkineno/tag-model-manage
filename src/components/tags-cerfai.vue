@@ -23,8 +23,8 @@
       size="small"
       style="width: 100%; height: 50vh"
       @row-click="rowClick">
-      <el-table-column fixed label="词条" prop="name"/>
-      <el-table-column fixed label="中文名" prop="t_name"/>
+      <el-table-column label="词条" prop="name"/>
+      <el-table-column label="中文名" prop="t_name"/>
       <el-table-column label="NFSW" prop="is_nsfw"/>
       <el-table-column label="描述" prop="desc"/>
       <el-table-column label="备注" prop="remarks"/>
