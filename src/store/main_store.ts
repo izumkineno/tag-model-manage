@@ -80,29 +80,24 @@ export const mainStore = defineStore('main', {
   actions: {
     GradioConfig(read?: boolean) {
       try {
-        const t: { [prop: string]: string | number } = {}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         // eslint-disable-next-line no-unused-expressions
         gradio_config.components.forEach(v => {
           this.gradioConfigItems.forEach(v2 => {
-            if (v2 === v) {
+            if (v2 === v.props.elem_id) {
               const v3 = v.props.value
-              console.log(v3, v)
               if (read) {
                 if (typeof this.gradioConfig[v] !== 'undefined') {
                   v.props.value = this.gradioConfig[v]
                 }
               } else {
                 this.gradioConfig[v] = v3
-                t[v] = v.props.value
-                console.log(v.props.value)
               }
             }
           })
         })
-        console.log(t, this.gradioConfig)
-        if (t) this.gradioConfig = t
+        console.log(this.gradioConfig)
       } catch (e) {
         console.log(e)
       }
