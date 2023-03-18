@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 import NestedFrame from '@/components/nested-frame.vue'
 import { Edit, Search } from '@element-plus/icons-vue'
-import { ref, unref } from 'vue'
+import { onMounted, ref, unref } from 'vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
 import { mainStore } from '@/store/main_store'
 import ResShow from '@/components/tags-cerfai.vue'
@@ -99,6 +99,13 @@ const tagSearch = () => {
     store.tableData = []
   }
 }
+onMounted(() => {
+  try {
+    store.gradioConfig(true)
+  } catch (e) {
+    console.log(e)
+  }
+})
 </script>
 <style>
 .el-affix {
