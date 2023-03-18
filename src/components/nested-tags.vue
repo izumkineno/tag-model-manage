@@ -4,7 +4,7 @@
       <el-row class="row-bg" justify="space-between">
         <div>{{ dataInfo.name }}</div>
         <el-switch
-          :v-model="dataInfo.expansion"
+          v-model="dataInfo.expansion"
           inline-prompt/>
       </el-row>
     </template>

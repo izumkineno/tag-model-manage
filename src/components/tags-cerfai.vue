@@ -6,10 +6,10 @@
       menu-trigger="click"
       mode="horizontal"
       @select="handleSelect">
-      <el-sub-menu v-for="i in cate.data.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
+      <el-sub-menu v-for="i in store.cate.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
         <template #title>{{ i.name }}</template>
         <el-menu-item
-          v-for="f in cate.data.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
+          v-for="f in store.cate.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
           :key="f.id"
           :index="f.id.toString()">
           {{ f.name }}
@@ -17,9 +17,9 @@
       </el-sub-menu>
     </el-menu>
   </el-scrollbar>
-  <el-card v-if="store.tableData">
+  <el-card v-if="store.tableData.length > 0">
     <el-table
-      :data="tableData.data"
+      :data="store.tableData"
       size="small"
       style="width: 100%; height: 50vh"
       @row-click="rowClick">
@@ -42,11 +42,6 @@ const cate = {
   code: 200,
   data: [],
   msg: '获取完整分类成功'
-}
-
-const tableData = {
-  code: 200,
-  data: []
 }
 
 const handleSelect = (index: number) => {
