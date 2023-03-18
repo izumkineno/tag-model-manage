@@ -10,6 +10,9 @@ module.exports = defineConfig({
   publicPath: './',
   productionSourceMap: false,
   configureWebpack: {
+    externals: {
+      'externals/GM_xmlhttpRequest.js': 'monkey'
+    },
     output: {
       filename: 'js/[name].js',
       chunkFilename: 'js/[name].js'

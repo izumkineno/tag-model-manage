@@ -9,7 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Cerfai: typeof import('./src/components/cerfai.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -25,12 +24,10 @@ declare module '@vue/runtime-core' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElTableV2: typeof import('element-plus/es')['ElTableV2']
     NestedFrame: typeof import('./src/components/nested-frame.vue')['default']
     NestedItem: typeof import('./src/components/nested-item.vue')['default']
     NestedTags: typeof import('./src/components/nested-tags.vue')['default']
     RawDisplayer: typeof import('./src/components/infra/raw-displayer.vue')['default']
-    ResShow: typeof import('./src/components/res-show.vue')['default']
     TagsCerfai: typeof import('./src/components/tags-cerfai.vue')['default']
   }
 }

@@ -1,14 +1,16 @@
-(function () {
-  'use strict'
+export function Post(url) {
+  let res
   try {
     GM_xmlhttpRequest({
-      method: 'GET',
-      url: 'https://www.baidu.com/',
+      method: 'POST',
+      url: url,
       onload: function (response) {
-        console.log(response.responseText)
+        res = response.responseText
+        console.log(res)
       }
     })
   } catch (e) {
     console.log(e)
   }
-})()
+  return res
+}
