@@ -87,7 +87,10 @@ export const mainStore = defineStore('main', {
       const req = {
         method: 'Post',
         url: useCate ? main + cate : main + search,
-        data: useCate ? JSON.parse('') : data,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(useCate ? '' : data),
         onload: callback
       }
       console.log('Request', req)
