@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
+import { ElMessage } from 'element-plus'
 
 export const mainStore = defineStore('main', {
   persist: true,
@@ -104,8 +105,10 @@ export const mainStore = defineStore('main', {
         if (res.code === 200) {
           this.tableData = res.data
           console.log('data', res.data)
+          ElMessage.success(res.msg)
         } else {
-          console.log('data', res.msg)
+          ElMessage.error(res.msg)
+          // console.log('data', res.msg)
         }
       }, value, id)
     },
@@ -115,8 +118,10 @@ export const mainStore = defineStore('main', {
         if (res.code === 200) {
           this.cate = res.data
           console.log('cate', res.data)
+          ElMessage.success(res.msg)
         } else {
-          console.log('cate', res.msg)
+          ElMessage.error(res.msg)
+          // console.log('cate', res.msg)
         }
       })
     },

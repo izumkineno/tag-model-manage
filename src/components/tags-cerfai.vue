@@ -41,7 +41,11 @@ import { onMounted } from 'vue'
 const store = mainStore()
 
 onMounted(() => {
-  store.cataGet()
+  try {
+    store.cataGet()
+  } catch (e) {
+    ElMessage.error('获取分类失败：' + e)
+  }
 })
 
 const handleSelect = (index: number) => {
