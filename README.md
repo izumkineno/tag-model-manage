@@ -2,7 +2,9 @@
 
 ### Vue3 + Element Plus + pinia + vuedraggable
 
-![1.png](./MarkdownResource/1.png)
+![2.png](./MarkdownResource/3.png)
+
+![老版本](./MarkdownResource/1.png)
 
 ![2.png](./MarkdownResource/2.png)
 
@@ -35,7 +37,7 @@
 
 - [x] 自动保存 / 读取
 
-- [x] 自带词库
+- [x] 连接词库（cerfai提供）
 
 - [ ] 右键菜单
 
