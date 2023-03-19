@@ -24,6 +24,7 @@
           v-if="element.state.editing"
           v-model="element.name"
           class="tag-input"
+          @pointerdown.stop
           @blur="store.editingInput(element)"
           @keyup.enter="store.editingInputMulti(element, index, type)"
           @click.stop/>
@@ -34,6 +35,7 @@
           max="7"
           min="-7"
           type="number"
+          @pointerdown.stop
           @blur="store.weightInput(element)"
           @keyup.enter="store.weightInput(element)"/>
         <div v-if="element.state.editing" style="display: inline-block; visibility: hidden;">{{
