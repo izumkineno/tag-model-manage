@@ -32,6 +32,7 @@ interface IMainStore extends Record<TTagType, ITag[]> {
     sym: Array<Array<string>>
     switch: {
       autoStart: ISwitch
+      table: boolean
     }
   }
   gradioConfigItems: string[]

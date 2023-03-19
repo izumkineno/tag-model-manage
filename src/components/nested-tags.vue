@@ -1,7 +1,7 @@
 <template>
   <el-card :body-style="dataInfo.expansion ? '' : {display: 'none'}">
     <template #header>
-      <el-row class="row-bg" justify="space-between">
+      <el-row align="middle" class="row-bg" justify="space-between">
         <div>{{ dataInfo.name }}</div>
         <el-switch
           v-model="dataInfo.expansion"
