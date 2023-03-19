@@ -32,7 +32,8 @@ export const mainStore = defineStore('main', {
           autoStart: {
             name: '自动开始',
             active: false
-          }
+          },
+          table: false
         }
       },
       gradioConfigItems: [
@@ -140,6 +141,7 @@ export const mainStore = defineStore('main', {
           this.tableData = res.data
           // console.log('data', res.data)
           ElMessage.success(res.msg || `获取数据成功，共 ${res.data.length} 条`)
+          this.config.switch.table = true
         } else {
           ElMessage.error(res.msg)
           // console.log('data', res.msg)

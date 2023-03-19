@@ -1,23 +1,29 @@
 <template>
-  <el-scrollbar class="menu">
-    <el-menu
-      :ellipsis="false"
-      :unique-opened="true"
-      menu-trigger="click"
-      mode="horizontal"
-      @select="handleSelect">
-      <el-sub-menu v-for="i in store.cate.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
-        <template #title>{{ i.name }}</template>
-        <el-menu-item
-          v-for="f in store.cate.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
-          :key="f.id"
-          :index="f.id.toString()">
-          {{ f.name }}
-        </el-menu-item>
-      </el-sub-menu>
-    </el-menu>
-  </el-scrollbar>
-  <el-card>
+  <el-card :body-style="store.config.switch.table ? '' : {display: 'none'}">
+    <template #header>
+      <el-row align="middle" justify="space-between">
+        <el-scrollbar style="width: calc(99% - 40px);overflow-y: hidden">
+          <el-menu
+            :ellipsis="false"
+            :unique-opened="true"
+            mode="horizontal"
+            @select="handleSelect">
+            <el-sub-menu v-for="i in store.cate.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
+              <template #title>{{ i.name }}</template>
+              <el-menu-item
+                v-for="f in store.cate.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
+                :key="f.id"
+                :index="f.id.toString()">
+                {{ f.name }}
+              </el-menu-item>
+            </el-sub-menu>
+          </el-menu>
+        </el-scrollbar>
+        <el-switch
+          v-model="store.config.switch.table"
+          inline-prompt/>
+      </el-row>
+    </template>
     <el-table
       :data="store.tableData"
       size="small"
@@ -60,9 +66,24 @@ const rowClick = (row: { name: string | undefined; }) => {
 
 </script>
 
-<style scoped>
+<style>
 .menu {
   position: relative;
   overflow: hidden;
+  width: 80%;
+}
+
+.el-sub-menu__title.el-tooltip__trigger.el-tooltip__trigger {
+
+}
+
+.el-menu.el-menu--popup {
+  min-width: 0 !important;
+  align-items: center;
+}
+
+.el-menu-item {
+  display: flex;
+  align-content: space-around;
 }
 </style>

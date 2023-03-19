@@ -1,5 +1,6 @@
 <template>
-  <NestedTags :data="store.todo" :data-info="store.info.todo" :style="store.info.todo.expansion && { position: 'sticky' }"
+  <NestedTags :data="store.todo" :data-info="store.info.todo"
+              :style="store.info.todo.expansion ? { position: 'sticky',top: 0,'z-index': 3000 } : ''"
               class="todo-frame"/>
   <NestedTags :data="store.prompt" :data-info="store.info.prompt"/>
   <NestedTags :data="store.promptNeg" :data-info="store.info.promptNeg"/>
@@ -14,14 +15,11 @@ const store = mainStore()
 </script>
 <style>
 .todo-frame {
-  .el-card {
-    top: 0;
-    z-index: 3000;
-
-    .el-card__body {
-      max-height: 40vh;
-      overflow: hidden;
-    }
+  top: 0;
+  z-index: 3000;
+  .el-card__body {
+    max-height: 40vh;
+    overflow: hidden;
   }
 }
 </style>
