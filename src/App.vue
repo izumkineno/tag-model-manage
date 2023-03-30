@@ -35,6 +35,8 @@
         <el-button ref="buttonRef" v-click-outside="onClickOutside">帮助</el-button>
         <el-button @click="store.GradioConfig(false)" @contextmenu.stop.prevent="gradioConfigClear">保存生成图基础配置
         </el-button>
+        <el-button :icon="Download" circle type="success" @click="download"/>
+        <el-button :icon="Upload" circle type="warning" @click="upload"/>
         <el-input v-model="input" clearable placeholder="词条搜索（cerfai提供）" @keydown.enter="tagSearch"/>
         <el-button :icon="Search" circle size="small" type="primary" @click="tagSearch"/>
       </el-space>
@@ -53,15 +55,17 @@
       <NestedFrame/>
     </el-scrollbar>
   </el-drawer>
+  <!--  <contextmenu-view />-->
 </template>
 
 <script lang="ts" setup>
 import NestedFrame from '@/components/nested-frame.vue'
-import { Edit, Search } from '@element-plus/icons-vue'
+import { Download, Edit, Search, Upload } from '@element-plus/icons-vue'
 import { onMounted, ref, unref } from 'vue'
 import { ClickOutside as vClickOutside, ElMessage } from 'element-plus'
 import { mainStore } from '@/store/main_store'
 import ResShow from '@/components/tags-cerfai.vue'
+// import ContextmenuView from '@/components/contextmenu-view.vue'
 
 const store = mainStore()
 
@@ -105,6 +109,38 @@ const gradioConfigClear = () => {
   store.gradioConfig = {}
   ElMessage.success('清理配置成功')
 }
+
+const download = () => {
+  const dataStr = localStorage.getItem('main')
+  if (dataStr) {
+    const blob = new Blob([dataStr], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'data.txt'
+    link.click()
+  }
+}
+
+const upload = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'application/plain'
+  input.onchange = (event) => {
+    try {
+      const reader = new FileReader()
+      reader.readAsText(event.target.files[0], 'UTF-8')
+      reader.onload = (event) => {
+        store.$state = JSON.parse(event.target.result)
+        ElMessage.success('加载数据成功')
+      }
+    } catch (e) {
+      ElMessage.error('加载数据失败：' + JSON.stringify(e))
+    }
+  }
+  input.click()
+}
+
 onMounted(() => {
   try {
     store.GradioConfig(true)
@@ -112,6 +148,7 @@ onMounted(() => {
     console.log(e)
   }
 })
+
 </script>
 <style>
 .el-affix {

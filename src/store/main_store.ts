@@ -3,9 +3,14 @@ import { nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 
 export const mainStore = defineStore('main', {
-  persist: true,
+  persist: {
+    paths: ['info', 'config', 'gradioConfigItems', 'gradioConfig', 'prompt', 'promptNeg', 'todo', 'tagGroups']
+  },
   state: (): IMainStore => {
     return {
+      cate: [],
+      tableData: [],
+      // 保存内容
       info: {
         prompt: {
           name: '提示词',
@@ -46,8 +51,6 @@ export const mainStore = defineStore('main', {
         'txt2img_cfg_scale',
         'txt2img_restore_faces'],
       gradioConfig: {},
-      cate: [],
-      tableData: [],
       prompt: [
         {
           id: '0',
