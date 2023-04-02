@@ -159,6 +159,7 @@ export const mainStore = defineStore('main', {
     editingInput(v: ITag) {
       v.name = v.name.trim()
       v.state.editing = false
+      v.weight = this.isLora(v) ? 1 : 0
     },
     // 判断是否有多个被输入
     editingInputMulti(v: ITag, i: number[], type: TTagType) {
@@ -219,8 +220,11 @@ export const mainStore = defineStore('main', {
       if (typeof v.weight as unknown === 'string') {
         v.weight = 0
       }
-      if (v.weight > 0 && v.weight < 2 && weight.length > 1) {
+      if (v.weight > 0 && v.weight < 2 && (weight.length > 1 || v.weight === 1)) {
         v.weightNu = v.weight
+        if (this.isLora(v)) {
+          v.name = v.name.replace(/:(\d|\d(\.\d{1,2}))>/g, `:${v.weightNu >= 0 ? v.weightNu : 0}>`)
+        }
       } else {
         v.weightNu = undefined
         v.weight = Number(v.weight.toFixed(0))
@@ -409,6 +413,10 @@ export const mainStore = defineStore('main', {
           this[type.replace('Tab', '')] = el.children
         }
       }
+    },
+    // 判断lora
+    isLora(v: ITag) {
+      return v.name.search('<lora:.*:(\\d|\\d(\\.\\d{1,2}))>') !== -1
     }
   }
 })

@@ -33,6 +33,7 @@
           v-if="element.state.weightEditing"
           v-model="element.weight"
           class="tag-input"
+          :step="store.isLora(element) ? 0.1 : 1"
           max="7"
           min="-7"
           type="number"
