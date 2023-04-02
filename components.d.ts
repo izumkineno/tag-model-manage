@@ -9,10 +9,12 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BodyContext: typeof import('./src/components/body-context.vue')['default']
     ContextmenuView: typeof import('./src/components/contextmenu-view.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMenu: typeof import('element-plus/es')['ElMenu']
@@ -25,9 +27,9 @@ declare module '@vue/runtime-core' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    NestedFrame: typeof import('./src/components/nested-frame.vue')['default']
+    NestedCard: typeof import('./src/components/nested-card.vue')['default']
     NestedItem: typeof import('./src/components/nested-item.vue')['default']
-    NestedTags: typeof import('./src/components/nested-tags.vue')['default']
+    NestedTab: typeof import('./src/components/nested-tab.vue')['default']
     RawDisplayer: typeof import('./src/components/infra/raw-displayer.vue')['default']
     TagsCerfai: typeof import('./src/components/tags-cerfai.vue')['default']
   }

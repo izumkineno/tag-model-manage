@@ -27,7 +27,8 @@
           @pointerdown.stop
           @blur="store.editingInput(element)"
           @keyup.enter="store.editingInputMulti(element, index, type)"
-          @click.stop/>
+          @click.stop
+          @contextmenu.stop/>
         <input
           v-if="element.state.weightEditing"
           v-model="element.weight"
@@ -172,7 +173,7 @@ div.el-card__body {
   }
 }
 
-div.el-card__body > ul > li, .ghost {
+div.el-card__body > ul > li {
   border-radius: 15px;
   background: var(--el-color-primary);
   color: white;
@@ -183,8 +184,11 @@ div.el-card__body > ul > li, .ghost {
   }
 }
 
-.ghost {
-  background: rgba(255, 255, 255, .1);
+.group.ghost {
+  background: rgba(0, 0, 0, .4);
+  .dragArea {
+    display: none;
+  }
 }
 
 .tag-frame.editing, .tag-frame.weight {

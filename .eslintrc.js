@@ -17,6 +17,8 @@ module.exports = {
     indent: 0,
     'space-before-function-paren': 0,
     'no-undef': 'off',
-    'vue/no-mutating-props': 'off'
+    'vue/no-mutating-props': 'off',
+    camelcase: 0,
+    '@typescript-eslint/ban-ts-comment': 'off'
   }
 }

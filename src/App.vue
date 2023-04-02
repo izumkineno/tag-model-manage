@@ -27,13 +27,13 @@
         </a>
         <el-button style="margin-left: 0.7rem" type="primary" @click="store.output">输出到webUI</el-button>
         <el-switch
-          v-model="store.config.switch.autoStart.active"
-          :active-text="store.config.switch.autoStart.name"
-          :inactive-text="store.config.switch.autoStart.name"
+          v-model="config.switch.autoStart.active"
+          :active-text="config.switch.autoStart.name"
+          :inactive-text="config.switch.autoStart.name"
           class="ml-2"
           inline-prompt/>
         <el-button ref="buttonRef" v-click-outside="onClickOutside">帮助</el-button>
-        <el-button @click="store.GradioConfig(false)" @contextmenu.stop.prevent="gradioConfigClear">保存生成图基础配置
+        <el-button @click="config.GradioConfig(false)" @contextmenu.stop.prevent="gradioConfigClear">保存生成图基础配置
         </el-button>
         <el-button :icon="Download" circle type="success" @click="download"/>
         <el-button :icon="Upload" circle type="warning" @click="upload"/>
@@ -52,22 +52,26 @@
     </template>
     <el-scrollbar>
       <res-show/>
-      <NestedFrame/>
+      <BodyContext/>
     </el-scrollbar>
   </el-drawer>
   <!--  <contextmenu-view />-->
 </template>
 
 <script lang="ts" setup>
-import NestedFrame from '@/components/nested-frame.vue'
+import BodyContext from '@/components/body-context.vue'
+import ResShow from '@/components/tags-cerfai.vue'
 import { Download, Edit, Search, Upload } from '@element-plus/icons-vue'
 import { onMounted, ref, unref } from 'vue'
 import { ClickOutside as vClickOutside, ElMessage } from 'element-plus'
 import { mainStore } from '@/store/main_store'
-import ResShow from '@/components/tags-cerfai.vue'
+import { configStore } from '@/store/config_store'
+import { tableStore } from '@/store/table_store'
 // import ContextmenuView from '@/components/contextmenu-view.vue'
 
 const store = mainStore()
+const config = configStore()
+const table = tableStore()
 
 const title = 'AI画图标签管理器'
 
@@ -99,14 +103,14 @@ const onClickOutside = () => {
 
 const tagSearch = () => {
   if (input.value.length > 0) {
-    store.cerfaitagSearch(input.value)
+    table.cerfaitagSearch(input.value)
   } else {
-    store.tableData = []
+    table.tableData = []
   }
 }
 
 const gradioConfigClear = () => {
-  store.gradioConfig = {}
+  config.gradioConfig = {}
   ElMessage.success('清理配置成功')
 }
 
@@ -143,7 +147,7 @@ const upload = () => {
 
 onMounted(() => {
   try {
-    store.GradioConfig(true)
+    config.GradioConfig(true)
   } catch (e) {
     console.log(e)
   }

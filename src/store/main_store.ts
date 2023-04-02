@@ -1,56 +1,11 @@
 import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
-import { ElMessage } from 'element-plus'
+import { configStore } from './config_store'
 
 export const mainStore = defineStore('main', {
-  persist: {
-    paths: ['info', 'config', 'gradioConfigItems', 'gradioConfig', 'prompt', 'promptNeg', 'todo', 'tagGroups']
-  },
-  state: (): IMainStore => {
+  persist: true,
+  state: (): TMainStore => {
     return {
-      cate: [],
-      tableData: [],
-      // 保存内容
-      info: {
-        prompt: {
-          name: '提示词',
-          expansion: true,
-          type: 'prompt'
-        },
-        promptNeg: {
-          name: '反向提示词',
-          expansion: true,
-          type: 'promptNeg'
-        },
-        todo: {
-          name: '待选/草稿栏',
-          expansion: false,
-          type: 'todo'
-        }
-      },
-      config: {
-        sym: [
-          ['(', ')'],
-          ['[', ']']
-        ],
-        switch: {
-          autoStart: {
-            name: '自动开始',
-            active: false
-          },
-          table: false
-        }
-      },
-      gradioConfigItems: [
-        'txt2img_sampling',
-        'txt2img_steps',
-        'txt2img_height',
-        'txt2img_width',
-        'txt2img_batch_count',
-        'txt2img_batch_size',
-        'txt2img_cfg_scale',
-        'txt2img_restore_faces'],
-      gradioConfig: {},
       prompt: [
         {
           id: '0',
@@ -68,7 +23,7 @@ export const mainStore = defineStore('main', {
       promptNeg: [
         {
           id: '1',
-          name: '这里创建负面提示词',
+          name: '这里创建反向提示词',
           state: {
             active: false,
             editing: false,
@@ -79,91 +34,39 @@ export const mainStore = defineStore('main', {
           children: []
         }
       ],
-      todo: []
+      todo: [],
+      promptTab: [
+        {
+          id: '0',
+          name: '分组1',
+          state: {
+            active: false,
+            editing: false,
+            weightEditing: false
+          },
+          weight: 0,
+          longText: false,
+          children: []
+        }
+      ],
+      promptNegTab: [
+        {
+          id: '1',
+          name: '反向分组1',
+          state: {
+            active: false,
+            editing: false,
+            weightEditing: false
+          },
+          weight: 0,
+          longText: false,
+          children: []
+        }
+      ],
+      todoTab: []
     }
   },
   actions: {
-    GradioConfig(read?: boolean) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        // eslint-disable-next-line no-unused-expressions
-        gradio_config.components.forEach(v => {
-          this.gradioConfigItems.forEach(v2 => {
-            if (v2 === v.props.elem_id) {
-              // console.log(v2, v.props.elem_id)
-              if (read) {
-                if (typeof this.gradioConfig[v2] !== 'undefined') {
-                  v.props.value = this.gradioConfig[v2]
-                }
-              } else {
-                this.gradioConfig[v2] = v.props.value
-              }
-            }
-          })
-        })
-        ElMessage.success('读取/保存配置成功：' + this.gradioConfig.toString())
-      } catch (e) {
-        ElMessage.error('读取/保存配置失败：' + e)
-      }
-    },
-    cerfaiSearch(
-      useCate: boolean,
-      callback: (response: { responseText: string }) => void,
-      keyword?: string,
-      id?: string) {
-      const main = 'https://api.cerfai.com'
-      const cate = '/open/get_full_categories'
-      const search = '/search_tags'
-      const data: {
-        keyword: string,
-        // eslint-disable-next-line camelcase
-        category_id?: string
-      } = {
-        keyword: keyword || ''
-      }
-      if (id) data.category_id = id
-      const req = {
-        method: 'Post',
-        url: useCate ? main + cate : main + search,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(useCate ? '' : data),
-        onload: callback
-      }
-      // console.log('Request', req)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      document.Request(req)
-    },
-    cerfaitagSearch(value: string, id?: string) {
-      this.cerfaiSearch(false, (response) => {
-        const res = JSON.parse(response.responseText)
-        if (res.code === 200) {
-          this.tableData = res.data
-          // console.log('data', res.data)
-          ElMessage.success(res.msg || `获取数据成功，共 ${res.data.length} 条`)
-          this.config.switch.table = true
-        } else {
-          ElMessage.error(res.msg)
-          // console.log('data', res.msg)
-        }
-      }, value, id)
-    },
-    cataGet() {
-      this.cerfaiSearch(true, (response) => {
-        const res = JSON.parse(response.responseText)
-        if (res.code === 200) {
-          this.cate = res.data
-          // console.log('cate', res.data)
-          ElMessage.success(res.msg || '获取子类成功')
-        } else {
-          ElMessage.error(res.msg)
-          // console.log('cate', res.msg)
-        }
-      })
-    },
     /***
      *  左键默认功能和快捷键映射
      *  0  None        启用/禁用
@@ -198,7 +101,6 @@ export const mainStore = defineStore('main', {
         6: () => this.add(e, index, type),
         7: () => this.longTextMode()
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const f = fun[key]
       f()
@@ -206,10 +108,8 @@ export const mainStore = defineStore('main', {
     // 寻找数据位置 todo: 优化？？
     pos(target: EventTarget | null, index: number[], type: TTagType, father?: boolean, detail?: boolean) {
       // console.log(target, index)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const p = target.parentElement.__draggable_component__ || target.__draggable_component__
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const end = target.__draggable_context
       const keys = index || Array.from(p.itemKey)
@@ -266,7 +166,6 @@ export const mainStore = defineStore('main', {
       if (this.input(e, index, t, type)) {
         nextTick(() => {
           if (e.target) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             e.target.children[0].focus()
           }
@@ -275,10 +174,12 @@ export const mainStore = defineStore('main', {
     },
     // 开启关闭
     switch(e: PointerEvent, index: number[], type: TTagType) {
-      const el: ITag | ITag[] = this.pos(e.target, index, type, true, true)
+      const el = this.pos(e.target, index, type, true, true)
+      // console.log(e, e.target, el)
       if ('state' in el && el.state) {
         el.state.active = !el.state.active
       }
+      this.tabChange(type, el as ITag)
     },
     // 修改后保存
     editingInput(v: ITag) {
@@ -288,7 +189,6 @@ export const mainStore = defineStore('main', {
     // 判断是否有多个被输入
     editingInputMulti(v: ITag, i: number[], type: TTagType) {
       v.name = v.name.trim()
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // console.log(e, i, e.target.parentElement)
       if (v.name.search(',') !== -1) {
@@ -319,13 +219,14 @@ export const mainStore = defineStore('main', {
     // 删除
     delete(e: PointerEvent, i: number[], type: TTagType): void {
       // console.log(e)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const context = e.target.__draggable_context
+      const context = typeof e.__draggable_context === 'undefined' ? e.target.__draggable_context : e.__draggable_context
       if (context) {
         const { index } = context
-        const parent = this.pos(e.target, i, type, true)
+        // @ts-ignore
+        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true)
         // console.log(parent, index, index, context)
+        const f = typeof this[type][index] !== 'undefined' ? this[type][index].state.active : true
         if (Array.isArray(parent)) {
           parent.splice(index, 1)
         } else {
@@ -333,6 +234,7 @@ export const mainStore = defineStore('main', {
             parent.children.splice(index, 1)
           }
         }
+        if (!f && this[type].length !== 0) this.tabChange(type, this[type][index - 1] || this[type][index])
       }
     },
     // 修改后保存
@@ -352,6 +254,24 @@ export const mainStore = defineStore('main', {
     },
     // 添加
     add(e: PointerEvent, index: number[], type: TTagType): void {
+      const tabOld = () => {
+        if (this[type].length === 1) {
+          const tab = this.tagModel('old')
+          console.log()
+          // @ts-ignore
+          tab.children = this[type.replace('Tab', '')]
+          tab.state.editing = false
+          console.log(tab)
+          this[type].unshift(tab)
+        }
+      }
+      const tabFocus = () => {
+        // @ts-ignore
+        const el = e.target.parentNode.firstElementChild.firstElementChild.firstElementChild.firstElementChild.lastElementChild
+        el.firstElementChild.focus()
+        el.firstElementChild.select()
+        // console.log(el, el.firstChild)
+      }
       // console.log(e)
       // 准备模板数据
       const newTag = this.tagModel()
@@ -372,52 +292,47 @@ export const mainStore = defineStore('main', {
         // console.log('target', t)
       }
       nextTick(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const com = typeof e.target.__draggable_component__ !== 'undefined'
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const con = typeof e.target.__draggable_context !== 'undefined'
+        // 判断是否是draggable的元素
         if (com || con) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          // console.log(e.target.__draggable_component__, e.target.__draggable_context)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const targetF = e.target.lastChild.children
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           // console.log(targetF, e.target.lastChild)
           if (com) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             targetF[0].focus()
             targetF[0].select()
           } else {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const children = e.target.parentElement.children
             const target = children[children.length - 1]
             target.children[0].focus()
             // target.children[0].select()
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             if (typeof targetF !== 'undefined') {
               targetF[targetF.length - 1].firstChild.focus()
               targetF[targetF.length - 1].firstChild.select()
             }
           }
+        } else {
+          tabOld()
+          tabFocus()
+          this.tabChange(type, newTag)
         }
       })
     },
     // 输出tag
     output() {
+      const config = configStore()
       // console.log(this.tag)
       // const tags: ITag[] = []
       // 添加权重
       const weight = (element: ITag, center: string) => {
-        const sym = this.config.sym
+        const sym = config.sym
         let s
         if (typeof element.weightNu !== 'undefined') {
           const nu = element.weightNu
@@ -464,7 +379,6 @@ export const mainStore = defineStore('main', {
       // console.log(pn)
 
       try {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const cps = gradio_config.components
         if (cps) {
@@ -485,8 +399,7 @@ export const mainStore = defineStore('main', {
           // console.log(input)
           input[0].props.value = p
           input[1].props.value = pn
-          if (this.config.switch.autoStart.active) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          if (config.switch.autoStart.active) {
             // @ts-ignore
             document.querySelector('body > gradio-app').shadowRoot.querySelector('#txt2img_generate').click()
           }
@@ -502,6 +415,26 @@ export const mainStore = defineStore('main', {
     // todo: 长文本模式
     longTextMode() {
       console.log('长文本模式')
+    },
+    // tab单选
+    tabChange(type: TTagType, el: ITag | ITag[]) {
+      if (typeof el !== 'undefined' && typeof (el as ITag[]).length === 'undefined') {
+        el = el as ITag
+        // 转换选取状态
+        if (type.search('Tab') !== -1) {
+          this[type] = this[type].map((v: ITag) => {
+            v.state.active = true
+            return v
+          })
+          el.state.active = false
+          if (typeof el.children === 'undefined') {
+            el.children = []
+          }
+          // 保存值
+          // @ts-ignore
+          this[type.replace('Tab', '')] = el.children
+        }
+      }
     }
   }
 })

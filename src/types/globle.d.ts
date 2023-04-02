@@ -12,7 +12,7 @@ interface ITag {
   children?: ITag[]
 }
 
-type TTagType = 'prompt' | 'promptNeg' | 'todo'
+type TTagType = 'prompt' | 'promptNeg' | 'todo' | 'promptTab' | 'promptNegTab' | 'todoTab'
 type TInputType = 'weightEditing' | 'editing'
 
 interface ISwitch {
@@ -26,19 +26,22 @@ interface IInfoTags {
   type: TTagType
 }
 
-interface IMainStore extends Record<TTagType, ITag[]> {
+type TMainStore = Record<TTagType, ITag[]>
+
+interface IConfigStore {
+  sym: Array<Array<string>>
   info: Record<TTagType, IInfoTags>
-  config: {
-    sym: Array<Array<string>>
-    switch: {
-      autoStart: ISwitch
-      table: boolean
-    }
+  switch: {
+    autoStart: ISwitch
+    table: boolean
   }
   gradioConfigItems: string[]
   gradioConfig: {
     [prop: string]: string | number
   }
+}
+
+interface ITableStore {
   cate: JSON[]
   tableData: JSON[]
 }

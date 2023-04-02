@@ -1,5 +1,5 @@
 <template>
-  <el-card :body-style="store.config.switch.table ? '' : {display: 'none'}">
+  <el-card :body-style="config.switch.table ? '' : {display: 'none'}">
     <template #header>
       <el-row align="middle" justify="space-between">
         <el-scrollbar style="width: calc(99% - 40px);overflow-y: hidden">
@@ -8,10 +8,10 @@
             :unique-opened="true"
             mode="horizontal"
             @select="handleSelect">
-            <el-sub-menu v-for="i in store.cate.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
+            <el-sub-menu v-for="i in table.cate.filter(v => v.level === 1)" :key="i.id" :index="i.id.toString()">
               <template #title>{{ i.name }}</template>
               <el-menu-item
-                v-for="f in store.cate.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
+                v-for="f in table.cate.filter(v => v.level === 2 && (v.id/100).toFixed(0) === (i.id/100).toFixed(0))"
                 :key="f.id"
                 :index="f.id.toString()">
                 {{ f.name }}
@@ -20,12 +20,12 @@
           </el-menu>
         </el-scrollbar>
         <el-switch
-          v-model="store.config.switch.table"
+          v-model="config.switch.table"
           inline-prompt/>
       </el-row>
     </template>
     <el-table
-      :data="store.tableData"
+      :data="table.tableData"
       size="small"
       style="width: 100%; height: 50vh"
       @row-click="rowClick">
@@ -41,27 +41,32 @@
 </template>
 
 <script lang="ts" setup>
-import { mainStore } from '@/store/main_store'
 import { onMounted } from 'vue'
+import { mainStore } from '@/store/main_store'
+import { configStore } from '@/store/config_store'
+import { tableStore } from '@/store/table_store'
+import { ElMessage } from 'element-plus'
 
 const store = mainStore()
+const config = configStore()
+const table = tableStore()
 
 onMounted(() => {
   try {
-    store.cataGet()
+    table.cataGet()
   } catch (e) {
     ElMessage.error('获取分类失败：' + e)
   }
 })
 
 const handleSelect = (index: number) => {
-  store.cerfaitagSearch('', index.toString())
+  table.cerfaitagSearch('', index.toString())
 }
 const rowClick = (row: { name: string | undefined; }) => {
   const tag: ITag = store.tagModel(row.name)
   tag.state.editing = false
   store.todo.push(tag)
-  store.info.todo.expansion = true
+  config.info.todo.expansion = true
 }
 
 </script>
