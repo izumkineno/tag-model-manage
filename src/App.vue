@@ -117,8 +117,12 @@ const gradioConfigClear = () => {
 const download = () => {
   const dataStr = localStorage.getItem('main')
 
-  const { config, gradioConfig, gradioConfigItems, info, ...tags } = JSON.parse(dataStr as string)
-  const data = JSON.stringify(tags)
+  const { promptTab, promptNegTab, todoTab, ...rub } = JSON.parse(dataStr as string)
+  const data = JSON.stringify({
+    promptTab: promptTab,
+    promptNegTab: promptNegTab,
+    todoTab: todoTab
+  })
   console.log(data)
   if (dataStr) {
     const blob = new Blob([data], { type: 'text/plain' })
