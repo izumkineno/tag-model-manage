@@ -35,34 +35,8 @@ export const mainStore = defineStore('main', {
         }
       ],
       todo: [],
-      promptTab: [
-        {
-          id: '0',
-          name: '分组1',
-          state: {
-            active: false,
-            editing: false,
-            weightEditing: false
-          },
-          weight: 0,
-          longText: false,
-          children: []
-        }
-      ],
-      promptNegTab: [
-        {
-          id: '1',
-          name: '反向分组1',
-          state: {
-            active: false,
-            editing: false,
-            weightEditing: false
-          },
-          weight: 0,
-          longText: false,
-          children: []
-        }
-      ],
+      promptTab: [],
+      promptNegTab: [],
       todoTab: []
     }
   },
