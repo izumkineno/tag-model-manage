@@ -116,8 +116,12 @@ const gradioConfigClear = () => {
 
 const download = () => {
   const dataStr = localStorage.getItem('main')
+
+  const { config, gradioConfig, gradioConfigItems, info, ...tags } = JSON.parse(dataStr as string)
+  const data = JSON.stringify(tags)
+  console.log(data)
   if (dataStr) {
-    const blob = new Blob([dataStr], { type: 'text/plain' })
+    const blob = new Blob([data], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
