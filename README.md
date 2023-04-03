@@ -2,11 +2,13 @@
 
 ### Vue3 + Element Plus + pinia + vuedraggable
 
-![2.png](./MarkdownResource/3.png)
+![词典](./MarkdownResource/3.png)
 
-![老版本](./MarkdownResource/1.png)
+![分组](./MarkdownResource/4.png)
 
-![2.png](./MarkdownResource/2.png)
+![早期版本](./MarkdownResource/1.png)
+
+![早期版本](./MarkdownResource/2.png)
 
 [油猴注入版](https://greasyfork.org/zh-CN/scripts/458675-ai-tag-%E7%BB%98%E7%94%BB%E7%AE%A1%E7%90%86%E5%99%A8-stable-diffusion-%E6%B3%A8%E5%85%A5%E7%89%88)
 
@@ -38,6 +40,8 @@
 - [x] 自动保存 / 读取
 
 - [x] 连接词库（cerfai提供）
+
+- [x] 分组和共享（导入导出）
 
 - [ ] 右键菜单
 
