@@ -191,7 +191,7 @@ export const mainStore = defineStore('main', {
       }
       this.editingInput(v)
     },
-    // 删除
+    // 删除 todo 最后一个删除删没清理
     delete(e: PointerEvent, i: number[], type: TTagType): void {
       // console.log(e)
       // @ts-ignore
@@ -415,7 +415,7 @@ export const mainStore = defineStore('main', {
       }
     },
     // 判断lora
-    isLora(v: ITag) {
+    isLora(v: ITag): boolean {
       return v.name.search('<lora:.*:(\\d|\\d(\\.\\d{1,2}))>') !== -1
     }
   }
