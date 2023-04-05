@@ -324,7 +324,7 @@ export const mainStore = defineStore('main', {
               const char = nu > 0 ? sym[0] : sym[1]
               nu = Math.abs(nu)
               const length = center.length
-              s = center.padStart(length + nu, char[0]).padEnd(length + nu * 2, char[1])
+              s = center.trim().padStart(length + nu, char[0]).padEnd(length + nu * 2, char[1])
             }
           }
         } else s = center
