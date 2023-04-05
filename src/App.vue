@@ -52,7 +52,7 @@
     </template>
     <el-scrollbar>
       <res-show/>
-      <BodyContext/>
+      <BodyContext :key="bodyKey" />
     </el-scrollbar>
   </el-drawer>
   <!--  <contextmenu-view />-->
@@ -72,6 +72,9 @@ import { tableStore } from '@/store/table_store'
 const store = mainStore()
 const config = configStore()
 const table = tableStore()
+
+// 重载组件用
+const bodyKey = ref(0)
 
 const title = 'AI画图标签管理器'
 
@@ -144,6 +147,7 @@ const upload = () => {
       reader.readAsText(event.target.files[0], 'UTF-8')
       reader.onload = (event) => {
         store.$state = JSON.parse(event.target.result)
+        bodyKey.value++
         ElMessage.success('加载数据成功')
       }
     } catch (e) {

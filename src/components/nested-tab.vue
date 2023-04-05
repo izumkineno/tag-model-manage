@@ -5,7 +5,7 @@
       :item-key="typeof props.index === 'undefined' ? '' : index.toString()"
       :list="children"
       class="card-tab"
-      filter=".off"
+      filter=".on"
       tag="ul"
       v-bind="dragOptions"
 
@@ -83,7 +83,7 @@ const btnClose = (e: { target: { parentElement: PointerEvent; }; }, index: numbe
 onMounted(() => {
   // 解决第一次启动时显示数据和存储数据没连接的问题
   const active = props.children.filter(v => !v.state.active)[0]
-  console.log(active)
+  // console.log(active)
   store.tabChange(props.type, active)
 })
 
