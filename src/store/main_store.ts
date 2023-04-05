@@ -312,20 +312,22 @@ export const mainStore = defineStore('main', {
       const weight = (element: ITag, center: string) => {
         const sym = config.sym
         let s
-        if (typeof element.weightNu !== 'undefined') {
-          const nu = element.weightNu
-          s = `${sym[0][0]}${center}:${nu}${sym[0][1]}`
-        } else {
-          let nu = element.weight
-          if (nu === 0) {
-            s = center
+        if (!this.isLora(element)) {
+          if (typeof element.weightNu !== 'undefined') {
+            const nu = element.weightNu
+            s = `${sym[0][0]}${center}:${nu}${sym[0][1]}`
           } else {
-            const char = nu > 0 ? sym[0] : sym[1]
-            nu = Math.abs(nu)
-            const length = center.length
-            s = center.padStart(length + nu, char[0]).padEnd(length + nu * 2, char[1])
+            let nu = element.weight
+            if (nu === 0) {
+              s = center
+            } else {
+              const char = nu > 0 ? sym[0] : sym[1]
+              nu = Math.abs(nu)
+              const length = center.length
+              s = center.padStart(length + nu, char[0]).padEnd(length + nu * 2, char[1])
+            }
           }
-        }
+        } else s = center
         // console.log(s)
         return s
       }
