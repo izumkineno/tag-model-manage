@@ -4,11 +4,13 @@
               class="todo-frame"/>
   <NestedTags :type="'prompt'"/>
   <NestedTags :type="'promptNeg'"/>
+  <contextmenu-view />
 </template>
 
 <script lang="ts" setup>
 import { configStore } from '@/store/config_store'
 import NestedTags from '@/components/nested-card.vue'
+import ContextmenuView from '@/components/contextmenu-view.vue'
 
 const config = configStore()
 

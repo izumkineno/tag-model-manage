@@ -55,7 +55,6 @@
       <BodyContext :key="bodyKey" />
     </el-scrollbar>
   </el-drawer>
-  <!--  <contextmenu-view />-->
 </template>
 
 <script lang="ts" setup>
@@ -67,7 +66,6 @@ import { ClickOutside as vClickOutside, ElMessage } from 'element-plus'
 import { mainStore } from '@/store/main_store'
 import { configStore } from '@/store/config_store'
 import { tableStore } from '@/store/table_store'
-// import ContextmenuView from '@/components/contextmenu-view.vue'
 
 const store = mainStore()
 const config = configStore()

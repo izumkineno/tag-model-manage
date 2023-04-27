@@ -1,44 +1,24 @@
 <template>
-  <div @contextmenu.prevent="onContextMenu">
-    <div>1263</div>
-  </div>
-  <div v-if="showMenu" :style="{ top: `${y}px`, left: `${x}px` }" class="menu">
+  <div v-if="contextmenu.showMenu" :style="{ top: `${contextmenu.y}px`, left: `${contextmenu.x}px` }" class="menu">
     <ul>
-      <li>菜单项1</li>
-      <li>菜单项2</li>
-      <li>菜单项3</li>
+      <li v-for="i of contextmenu.menu" :key="i.name" @click="() => {i.action();contextmenu.showMenu = false}">{{ i.name }}</li>
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { contextmenuStore } from '@/store/contextmenu_store'
 
-const showMenu = ref(false)
-let x = 0
-let y = 0
-
-const onContextMenu = (event: MouseEvent) => {
-  event.preventDefault()
-  showMenu.value = true
-  x = event.pageX
-  y = event.pageY
-  document.addEventListener('click', onClickOutside)
-}
-
-const onClickOutside = () => {
-  showMenu.value = false
-  document.removeEventListener('click', onClickOutside)
-}
+const contextmenu = contextmenuStore()
 
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .menu {
   display: inline-block;
   position: fixed;
   box-sizing: border-box;
-  background-color: var(--el-color-primary);
+  background-color: var(--el-color-primary-dark-2);
   border: 1px solid #0077c2;
   padding: 5px;
   z-index: 999;

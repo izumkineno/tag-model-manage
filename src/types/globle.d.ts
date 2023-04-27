@@ -45,3 +45,20 @@ interface ITableStore {
   cate: JSON[]
   tableData: JSON[]
 }
+
+/// ///////////////////////////// 右键菜单
+type contextualMenuIndex = 1 | 2 | 3 | 4
+interface contextMenuStore {
+  showMenu: boolean
+  x: number
+  y: number
+  event?: PointerEvent
+  index?: number[]
+  type?: TTagType
+}
+interface menuFunction {
+  name: string
+  icon: string
+  key: string
+  action: () => void
+}
