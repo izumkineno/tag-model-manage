@@ -43,7 +43,6 @@ export const mainStore = defineStore('main', {
   },
   actions: {
     // todo: 按功能拆分文件
-
     /***
      *  左键默认功能和快捷键映射
      *  0  None        启用/禁用
@@ -56,9 +55,9 @@ export const mainStore = defineStore('main', {
      *  5  + Ctr       添加
      *  6  + Alt       添加组
      *  7  + Ctr + Alt 切换tag模式
-     *
-     *  @index 从根元素到父元素的位置数组，如果没有爷级则为[]，同上文 computer 中的 index
-     *
+     * @param e 点击事件，用于获取原型链上的draggable实例
+     * @param index 从根元素到父元素的位置数组，如果没有爷级则为[]，组件nested-item computer 中的 index
+     * @param type tag所属类型见类型定义TTagType
      */
     clickHandle(e: PointerEvent, index: number[], type: TTagType) {
       // console.log(e, index)
@@ -82,7 +81,15 @@ export const mainStore = defineStore('main', {
       const f = fun[key]
       f()
     },
-    // 寻找数据位置 todo: 优化？？
+    // todo: 优化？？
+    /**
+     * 获取tag在draggable数组中的位置
+     * @param target 事件的目标event.target
+     * @param index 同上，从根元素到父元素的位置数组，如果没有爷级则为[]，组件nested-item computer 中的 index
+     * @param type 同上，tag所属类型见类型定义TTagType
+     * @param father 是否获取目标元素的父元素
+     * @param detail father必须是true才有用，精准获取点击元素的draggable数组实例
+     */
     pos(target: EventTarget | null, index: number[], type: TTagType, father?: boolean, detail?: boolean) {
       // console.log(target, index)
       // @ts-ignore
@@ -240,10 +247,11 @@ export const mainStore = defineStore('main', {
           }
         }
       } catch (e) {
-        // console.log(e)
+        console.log(e)
       }
     },
 
+    /******************************************************************************************************************/
     // func: 通用input自动聚焦，修改和权重
     inputFocus(e: PointerEvent, index: number[], t: TInputType, type: TTagType) {
       if (this.input(e, index, t, type)) {
@@ -264,7 +272,7 @@ export const mainStore = defineStore('main', {
       }
       this.tabChange(type, el as ITag)
     },
-    // func: 删除
+    // func: 删除 todo：当只有一个tab时删除没有连内容一起删除
     delete(e: PointerEvent, i: number[], type: TTagType): void {
       // console.log(e)
       // @ts-ignore
@@ -366,14 +374,13 @@ export const mainStore = defineStore('main', {
       if (context) {
         const { index } = context
         // @ts-ignore
-        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true)
+        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true, true)
 
         if (Array.isArray(parent)) {
           parent.splice(index, 0, JSON.parse(JSON.stringify(parent[index])))
         }
       }
     },
-
     // func: 右键菜单
     contextmenu(e: PointerEvent, index: number[], type: TTagType): void {
       const contextmenu = contextmenuStore()
@@ -391,6 +398,7 @@ export const mainStore = defineStore('main', {
     longTextMode() {
       console.log('长文本模式')
     },
+    /******************************************************************************************************************/
 
     // 修改后保存权重
     weightInput(v: ITag) {
