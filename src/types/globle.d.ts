@@ -50,6 +50,7 @@ interface ITableStore {
 type contextualMenuIndex = 1 | 2 | 3 | 4
 interface contextMenuStore {
   showMenu: boolean
+  showMenuGroup: boolean
   x: number
   y: number
   event?: PointerEvent

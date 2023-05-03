@@ -75,7 +75,7 @@ export const mainStore = defineStore('main', {
         3: () => this.delete(e, index, type),
         4: () => this.contextmenu(e, index, type),
         5: () => this.add(e, index, type),
-        6: () => this.add(e, index, type),
+        6: () => this.add(e, index, type, true),
         7: () => this.longTextMode()
       }
       // @ts-ignore
@@ -286,7 +286,7 @@ export const mainStore = defineStore('main', {
       }
     },
     // func: 添加
-    add(e: PointerEvent, index: number[], type: TTagType): void {
+    add(e: PointerEvent, index: number[], type: TTagType, group?: boolean): void {
       const tabOld = () => {
         if (this[type].length === 1) {
           const tab = this.tagModel('old')
@@ -309,7 +309,7 @@ export const mainStore = defineStore('main', {
       // 准备模板数据
       const newTag = this.tagModel()
       // Alt 点击 增加组
-      if (e.altKey) {
+      if (group) {
         newTag.children = []
       }
       // 寻找位置，并添加
@@ -358,14 +358,33 @@ export const mainStore = defineStore('main', {
         }
       })
     },
+    // func: 复制
+    copy(e: PointerEvent, i: number[], type: TTagType): void {
+      // console.log(e)
+      // @ts-ignore
+      const context = typeof e.__draggable_context === 'undefined' ? e.target.__draggable_context : e.__draggable_context
+      if (context) {
+        const { index } = context
+        // @ts-ignore
+        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true)
 
-    // todo: func: 右键菜单
+        if (Array.isArray(parent)) {
+          parent.splice(index, 0, JSON.parse(JSON.stringify(parent[index])))
+        }
+      }
+    },
+
+    // func: 右键菜单
     contextmenu(e: PointerEvent, index: number[], type: TTagType): void {
       const contextmenu = contextmenuStore()
-      console.log('菜单', e)
+      // console.log('菜单', e)
       // @ts-ignore
       if (e.target.__draggable_context !== undefined) {
         contextmenu.contextMenuClick(e, index, type)
+      }
+      // @ts-ignore
+      if (e.target.__draggable_component__ !== undefined) {
+        contextmenu.contextMenuClick(e, index, type, true)
       }
     },
     // todo: func: 长文本模式

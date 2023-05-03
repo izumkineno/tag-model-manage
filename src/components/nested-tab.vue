@@ -30,7 +30,12 @@
             {{ element.name + '1' }}
           </div>
           <span v-else>{{ element.name }}</span>
-          <el-button v-if="!element.state.editing" circle size="small" style="margin-left: 3px; width: 1rem; height: 1rem; border: 0" :icon="Close" @click="btnClose($event, index, type)" />
+          <el-popconfirm :title="`确认删除?`"
+            @confirm="btnClose(index, type)">
+            <template #reference>
+              <el-button v-if="!element.state.editing" circle size="small" style="margin-left: 3px; width: 1rem; height: 1rem; border: 0" :icon="Close" @click="getEvent"/>
+            </template>
+          </el-popconfirm>
         </li>
       </template>
     </Draggable>
@@ -74,10 +79,17 @@ const ElState = (element: ITag) => {
   const group = typeof element.children !== 'undefined' ? 'group ' : ''
   return group + active + editing + weightEditing
 }
+
+// 获取删除时的事件
+let eventClose: { target: { parentElement: PointerEvent; }; }
+const getEvent = (e: { target: { parentElement: PointerEvent; }; }) => {
+  eventClose = e
+}
+
 // 删除
-const btnClose = (e: { target: { parentElement: PointerEvent; }; }, index: number[], type: TTagType) => {
+const btnClose = (index: number[], type: TTagType) => {
   // console.log(e, index, type, e.target.parentElement, e.target.parentElement.__draggable_context)
-  store.delete(e.target.parentElement, index, type)
+  store.delete(eventClose.target.parentElement, index, type)
 }
 
 onMounted(() => {
