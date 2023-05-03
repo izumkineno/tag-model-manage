@@ -1,15 +1,15 @@
 <template>
-  <NestedTags :type="'todo'"
+  <NestedCard :type="'todo'"
               :style="config.info.todo.expansion ? { position: 'sticky',top: 0,'z-index': 900 } : ''"
               class="todo-frame"/>
-  <NestedTags :type="'prompt'"/>
-  <NestedTags :type="'promptNeg'"/>
+  <NestedCard :type="'prompt'"/>
+  <NestedCard :type="'promptNeg'"/>
   <contextmenu-view />
 </template>
 
 <script lang="ts" setup>
 import { configStore } from '@/store/config_store'
-import NestedTags from '@/components/nested-card.vue'
+import NestedCard from '@/components/nested-card.vue'
 import ContextmenuView from '@/components/contextmenu-view.vue'
 
 const config = configStore()

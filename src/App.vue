@@ -7,6 +7,7 @@
     v-model="drawer"
     :title="title"
     direction="ltr"
+    @contextmenu.prevent
     size="75%">
     <template #header>
       <el-space wrap>
@@ -51,8 +52,8 @@
       </el-popover>
     </template>
     <el-scrollbar>
-      <res-show/>
-      <BodyContext :key="bodyKey" />
+      <Rcerfai/>
+      <BodyContext :key="bodyKey"/>
     </el-scrollbar>
   </el-drawer>
 <!--  <RawDisplayer title="" :value="store.prompt" />-->
@@ -60,7 +61,7 @@
 
 <script lang="ts" setup>
 import BodyContext from '@/components/body-context.vue'
-import ResShow from '@/components/tags-cerfai.vue'
+import Rcerfai from '@/components/tags-cerfai.vue'
 import { Download, Edit, Search, Upload } from '@element-plus/icons-vue'
 import { onMounted, ref, unref } from 'vue'
 import { ClickOutside as vClickOutside, ElMessage } from 'element-plus'

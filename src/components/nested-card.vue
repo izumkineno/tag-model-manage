@@ -1,5 +1,5 @@
 <template>
-  <el-card :body-style="config.info[type].expansion ? '' : { display: 'none' }">
+  <el-card @contextmenu.prevent :body-style="config.info[type].expansion ? '' : { display: 'none' }">
     <template #header>
       <el-row align="middle" class="row-bg" justify="space-between">
         <div>{{ config.info[type].name }}</div>

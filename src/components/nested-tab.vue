@@ -9,6 +9,7 @@
       tag="ul"
       v-bind="dragOptions"
 
+      @dblclick="store.inputFocus($event, index, 'editing', type)"
       @click.stop.exact="store.clickHandle($event, index, type)"
       @click.stop.exact.ctrl="store.clickHandle($event, index, type)"
       @click.stop.exact.ctrl.alt="store.clickHandle($event, index, type)">
