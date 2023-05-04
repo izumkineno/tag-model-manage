@@ -477,9 +477,13 @@ export const mainStore = defineStore('main', {
      * 7. [from::when]
      * 8. <lore:abc:1>
      */
+    // 判断数字权重
+    isWeightNu(v: ITag): boolean {
+      return v.name.search('\\((\\s?(?:\\w+\\s*,*\\s*)*\\s?:\\s?\\d+(\\.\\d+)?)\\s?\\)') !== -1
+    },
     // 判断lora
     isLora(v: ITag): boolean {
-      return v.name.search('<lora:.*:(\\d|\\d(\\.\\d{1,2}))>') !== -1
+      return v.name.search(/<lora:.*:(\d|\d(\.\d{1,2}))>/g) !== -1
     }
   }
 })
