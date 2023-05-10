@@ -99,7 +99,7 @@ const ElStyle = (element: ITag) => {
   let bg
   if (typeof element.weightNu !== 'undefined') {
     const nu = element.weightNu
-    bg = nu > 1
+    bg = nu >= 1
       ? `rgba(0, 200, 0, ${color(nu - 1)}`
       : `rgba(200, 0, 0, ${color(1 - nu)})`
   } else {

@@ -119,6 +119,23 @@ export const mainStore = defineStore('main', {
 
       return s
     },
+    /**
+     * 通用input，修改和权重，数字范围判断使用符号还是数字
+     * @param e 点击事件，用于获取原型链上的draggable实例
+     * @param index 从根元素到父元素的位置数组，如果没有爷级则为[]，组件nested-item computer 中的 index
+     * @param t 修改输入类型
+     * @param type tag所属类型见类型定义TTagType
+     */
+    input(e: PointerEvent, index: number[], t: TInputType, type: TTagType) {
+      // console.log(e, index)
+      const el: ITag | ITag[] = this.pos(e.target, index, type, true, true)
+      if ('state' in el && el.state) {
+        el.state[t] = !el.state[t]
+        return true
+      } else {
+        return false
+      }
+    },
     // tag 模板
     tagModel(name?: string): ITag {
       const id = '' + Math.random().toString(36).slice(-8)
@@ -132,17 +149,6 @@ export const mainStore = defineStore('main', {
           weightEditing: false
         },
         weight: 0
-      }
-    },
-    // 通用input，修改和权重，数字范围判断使用符号还是数字
-    input(e: PointerEvent, index: number[], t: TInputType, type: TTagType) {
-      // console.log(e, index)
-      const el: ITag | ITag[] = this.pos(e.target, index, type, true, true)
-      if ('state' in el && el.state) {
-        el.state[t] = !el.state[t]
-        return true
-      } else {
-        return false
       }
     },
     // tag -> tab分组
@@ -272,7 +278,7 @@ export const mainStore = defineStore('main', {
       }
       this.tabChange(type, el as ITag)
     },
-    // func: 删除 todo：当只有一个tab时删除没有连内容一起删除
+    // func: 删除
     delete(e: PointerEvent, i: number[], type: TTagType): void {
       // console.log(e)
       // @ts-ignore
@@ -291,6 +297,13 @@ export const mainStore = defineStore('main', {
           }
         }
         if (!f && this[type].length !== 0) this.tabChange(type, this[type][index - 1] || this[type][index])
+        // console.log(type.search('Tab'), parent.length)
+        // 当tab为最后一个时连内容一起删除
+        // @ts-ignore
+        if (type.search('Tab') !== -1 && parent?.length === 0) {
+          // @ts-ignore
+          this[type.replace('Tab', '')] = []
+        }
       }
     },
     // func: 添加
@@ -298,12 +311,12 @@ export const mainStore = defineStore('main', {
       const tabOld = () => {
         if (this[type].length === 1) {
           const tab = this.tagModel('old')
-          console.log()
           // @ts-ignore
           tab.children = this[type.replace('Tab', '')]
           tab.state.editing = false
-          console.log(tab)
-          this[type].unshift(tab)
+          // console.log(tab)
+          // @ts-ignore
+          if (tab.children.length > 0) this[type].unshift(tab)
         }
       }
       const tabFocus = () => {
@@ -374,7 +387,7 @@ export const mainStore = defineStore('main', {
       if (context) {
         const { index } = context
         // @ts-ignore
-        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true, true)
+        const parent = this.pos(typeof e.target !== 'undefined' ? e.target : e, i, type, true)
 
         if (Array.isArray(parent)) {
           parent.splice(index, 0, JSON.parse(JSON.stringify(parent[index])))
@@ -408,6 +421,7 @@ export const mainStore = defineStore('main', {
       if (typeof v.weight as unknown === 'string') {
         v.weight = 0
       }
+      // 数字权重一般在0和2之间
       if (v.weight > 0 && v.weight < 2 && (weight.length > 1 || v.weight === 1)) {
         v.weightNu = v.weight
         if (this.isLora(v)) {
@@ -424,18 +438,44 @@ export const mainStore = defineStore('main', {
       v.state.editing = false
       v.weight = this.isLora(v) ? 1 : 0
     },
+    // 切割没有被括号包围的字符串
+    extractStrings(text: string, cut: string): string[] {
+      const result: string[] = []
+      let start = 0
+      let s = 0
+      let m = 0
+      let l = 0
+      let b = 0
+      for (let i = 0; i < text.length; i++) {
+        switch (text[i]) {
+          case '(': s++; break
+          case ')': s--; break
+          case '[': m++; break
+          case ']': m--; break
+          case '{': l++; break
+          case '}': l--; break
+          case '<': b++; break
+          case '>': b--; break
+          case cut: if (s === 0 && m === 0 && l === 0 && b === 0) {
+            const t = text.slice(start, i).trim()
+            result.push(t)
+            start = i + 1
+          }
+        }
+      }
+      result.push(text.slice(start).trim())
+      return result
+    },
     // 判断是否有多个被输入
     editingInputMulti(iTag: ITag, numbers: number[], type: TTagType) {
-      iTag.name = iTag.name.trim()
       // @ts-ignore
       // console.log(e, i, e.target.parentElement)
-
-      // 提取字符
-      function extractStrings(input: string): string[] {
-        const regex = /(?:\([^)]*\)|\[[^\]]*\]|\{[^}]*\}|[^,])+/g
-        return input.match(regex) || []
-      }
-      const tags = extractStrings(iTag.name)
+      // 切割tag字符串
+      iTag.name = iTag.name.trim()
+      iTag.name = iTag.name.replace('，', ',')
+      iTag.name = iTag.name.replace('（', '(')
+      iTag.name = iTag.name.replace('）', ')')
+      const tags = this.extractStrings(iTag.name, ',')
 
       let p: ITag['children'] | ITag = this[type]
       for (const v of numbers) {
@@ -448,42 +488,107 @@ export const mainStore = defineStore('main', {
         const curIndex = p.indexOf(iTag)
         // console.log(p, v, curIndex)
         p.splice(curIndex, 1)
-
-        // 新建tag
-        const newTag = (t: string) => {
-          const tag = this.tagModel()
-          tag.name = t
-          tag.state.editing = false
-          return tag
-        }
         // 为当前tags实例化
-        for (const t of tags) {
-          if (t.length > 0) {
-            const tag = newTag(t)
-            p.push(tag)
-          }
-        }
+        this.editingInputMultiCheck(p, tags)
       }
       this.editingInput(iTag)
+    },
+    editingInputMultiCheck(p: ITag[], tags: string[]) {
+      const checkWeight = (Tag: ITag, t: string) => {
+        // console.log(Tag)
+        if (this.isWeightNu(Tag.name)) {
+          this.getWeightNu(Tag)
+        } else {
+          this.getWeight(t, Tag)
+        }
+      }
+      // console.log(tags)
+      for (const t of tags) {
+        if (t.length > 0) {
+          const tag = this.tagModel()
+          tag.state.editing = false
+          tag.name = t.trim()
+          // 判断权重类型
+          checkWeight(tag, t)
+          // todo: 判断组
+          if (t.includes(',') && t[0] !== '<') {
+            const tags = this.extractStrings(tag.name, ',')
+            if (tags.length > 1) {
+              tag.children = []
+              tag.name = '组'
+              this.editingInputMultiCheck(tag.children, tags)
+            }
+          }
+          if (this.isLora(tag)) {
+            this.getLoraWeight(tag)
+          }
+          p.push(tag)
+        }
+      }
     },
     /**
      * todo: 判断tag类型
      * 1. (abc)
-     * 2. [abc]
+     * 2. [abc] | {abc}
      * 3. (abc:1.2)
-     * 4. [abc|ab]
-     * 5. [from:to:when]
-     * 6. [to:when]
-     * 7. [from::when]
+     * 4. // [abc|ab]
+     * 5. // [from:to:when]
+     * 6. // [to:when]
+     * 7. // [from::when]
      * 8. <lore:abc:1>
      */
+    // 获取权重
+    getWeight(t: string, tag: ITag) {
+      // console.log('getWeight')
+      const left = t.match(/^(\{|\[|\(){0,}/g)
+      const right = t.match(/(\}|\]|\)){0,}$/g)
+      if (left && right) {
+        const weight = left[0].length > right[0].length ? right[0].length : left[0].length
+        // console.log(weight)
+
+        // todo
+        // 排除渐变语法
+        if (t.includes('|') || t.search(/:\s?\d+(\.\d+)?]/g) !== -1) {
+          return
+        }
+
+        if (t[0] === '(') {
+          tag.weight = weight
+        } else if (t[0] === '[' || t[0] === '{') {
+          tag.weight = 0 - weight
+        }
+        tag.name = tag.name.slice(weight, tag.name.length - weight).trim()
+      }
+    },
+    // 获取数字权重
+    getWeightNu(tag: ITag) {
+      const wn = tag.name.match(/:\s?\d+(\.\d+)?\)$/g)
+      const nu = wn?.[0]
+      if (typeof nu !== 'undefined') {
+        const nuNumber = nu.length > 0 ? Number(nu.slice(1, nu.length - 1)) : 0
+        tag.weightNu = nuNumber
+        tag.weight = nuNumber
+        tag.name = tag.name.slice(1, tag.name.length - nu.length)
+        // console.log(nu, nu.length, nuNumber)
+      }
+    },
+    // 获取lora权重
+    getLoraWeight(tag: ITag) {
+      const lw = tag.name.match(/:\s?\d+(\.\d+)?>$/g)
+      const nu = lw?.[0]
+      if (typeof nu !== 'undefined') {
+        const nuNumber = nu.length > 0 ? Number(nu.slice(1, nu.length - 1)) : 0
+        tag.weightNu = nuNumber
+        tag.weight = nuNumber
+      }
+    },
     // 判断数字权重
-    isWeightNu(v: ITag): boolean {
-      return v.name.search('\\((\\s?(?:\\w+\\s*,*\\s*)*\\s?:\\s?\\d+(\\.\\d+)?)\\s?\\)') !== -1
+    isWeightNu(text: string): boolean {
+      return text.search(/:\s?\d+(\.\d+)?\)$/g) !== -1
     },
     // 判断lora
     isLora(v: ITag): boolean {
-      return v.name.search(/<lora:.*:(\d|\d(\.\d{1,2}))>/g) !== -1
+      return v.name.trim().search(/^<lora:.*:(\d|\d(\.\d{1,2}))>$/g) !== -1
     }
   }
 })
