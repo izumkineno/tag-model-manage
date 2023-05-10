@@ -111,7 +111,7 @@ export const contextmenuStore = defineStore('contextmenu', {
         // 屏幕长宽
         const screenWidth = window.innerWidth
         const screenHeight = window.innerHeight
-        console.log(screenWidth, screenHeight, e.clientX, e.clientY)
+        // console.log(screenWidth, screenHeight, e.clientX, e.clientY)
 
         const menuWidth = 350
         const menuHeight = Object.keys(group ? this.menuGroup : this.menu).length * 50 + 50
